@@ -2,14 +2,9 @@
 session_start();
 
 
-class Blackjack{
-    public $score = 0; // adds a property to the class blackjack "score".
+class blackjack{
+    public $score = 0;
     public $total_points = 0;
-
-    public function __construct()
-    { $this->hit();
-        $this->hit();
-    }
 
 
     public function hit(){
@@ -31,5 +26,12 @@ class Blackjack{
 
 }
 
+//$person = new blackjack();
+//
+//echo $person -> Hit();
+//echo "<br>";
+//echo $person -> stand();
+//echo "<br>";
+//echo $person -> surrender();
 
 ?>

@@ -1,8 +1,5 @@
 <?php
-
-
-
-
+session_start();
 
 ?>
 <!doctype html>
@@ -24,7 +21,7 @@
 
 <div class="container m-3 d-flex justify-content-center">
 <form action="game.php">
-    <input type="submit" value="Start Blackjack!">
+    <input type="submit" name="play-game" value="Start Blackjack!">
 </form>
 </div>
 

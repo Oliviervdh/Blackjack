@@ -1,12 +1,21 @@
 <?php
-session_start();
-include ("blackjack.php");
+require 'blackjack.php'; // first you require Blackjack.php so your session has access to the class "blackjack" and its functions/methods.
+session_start();  // here you call the whole session "Which is in theory a massive array with (global super-vars, and anything you put in it).
 
-$player = new Blackjack;
-$dealer = new Blackjack;
+if (isset($_POST['hit'])){
+    $player = $_SESSION['player']; // here you declare what you want to take out of the session.
+    $dealer = $_SESSION['dealer'];
 
-$_SESSION['player'] = $player;
-$_SESSION['dealer'] = $dealer;
+}
+
+if (isset($_POST['reset'])){
+    unset($_SESSION['player']); // If you hit 'reset' unset the player session, the $player, $dealer to reset the game.
+        unset($_SESSION['dealer']);
+       $player = new Blackjack(); // here you instantiate your class with an object. "$player" (object are instances of classes).
+    $dealer = new Blackjack();
+}
+
+
 
 
 
@@ -32,7 +41,7 @@ $_SESSION['dealer'] = $dealer;
 
         <div>
             <form method="POST">
-                <input type="submit" name="hit" value="Hit">
+                <input type="submit" name="hit" value="Hit me">
                 <input type="submit" name="stand" value="Stand">
                 <input type="submit" name="surrender" value="Surrender...">
                 <input type="submit" name="reset" value="Reset">
@@ -41,19 +50,28 @@ $_SESSION['dealer'] = $dealer;
 
         <div class="output">
             <h1>Output</h1>
+            <?php
+            if (isset($_POST['hit'])){
+                $player->hit();
+                if ($player->score>21){
+                    echo "You lost!";
+                    echo $player->score;
+                }
+            }
+
+
+
+
+            ?>
         </div>
     </div>
-
-
-
-
-
-
 </div>
 
+<?php
 
+$_SESSION['player'] = $player; // here you declare what you want to put back into the the session.
+$_SESSION['dealer'] = $dealer;
 
-
-
+?>
 </body>
 </html>
