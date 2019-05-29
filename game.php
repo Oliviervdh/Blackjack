@@ -1,11 +1,24 @@
 <?php
-require 'blackjack.php'; // first you require Blackjack.php so your session has access to the class "blackjack" and its functions/methods.
-session_start();  // here you call the whole session "Which is in theory a massive array with (global super-vars, and anything you put in it).
+ini_set('display_errors', 'On'); // Shows all errors and warnings.
+error_reporting(E_ALL); // Shows all errors and warnings.
 
-if (isset($_POST['hit'])){
+
+require 'blackjack.php'; // first you require Blackjack.php so your session has access to the class "blackjack" and its functions/methods.
+session_start(); // here you call the whole session "Which is in theory a massive array with (global super-vars, and anything you put in it).
+
+
+if (isset($_POST['play'])){ // if you hit "Play blackjack!"you instantiate your class with the objects: "$player - $dealer". (object are instances of classes).
+    $player = $_SESSION['player'];
+    $dealer = $_SESSION['dealer'];
+    unset($_SESSION['player']); // If you hit 'reset' unset the player session, the $player, $dealer to reset the game.
+    unset($_SESSION['dealer']);
+    $player = new Blackjack();
+    $dealer = new Blackjack();
+}
+
+if (isset($_POST['hit']) || isset($_POST['stand']) || isset($_POST['surrender'])){
     $player = $_SESSION['player']; // here you declare what you want to take out of the session.
     $dealer = $_SESSION['dealer'];
-
 }
 
 if (isset($_POST['reset'])){
@@ -14,11 +27,6 @@ if (isset($_POST['reset'])){
        $player = new Blackjack(); // here you instantiate your class with an object. "$player" (object are instances of classes).
     $dealer = new Blackjack();
 }
-
-
-
-
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -49,19 +57,52 @@ if (isset($_POST['reset'])){
             </div>
 
         <div class="output">
-            <h1>Output</h1>
+            <h1>Game bord</h1>
             <?php
             if (isset($_POST['hit'])){
                 $player->hit();
+                echo "Your score: ". $player->score;
                 if ($player->score>21){
-                    echo "You lost!";
-                    echo $player->score;
+                    echo " You lost!";
                 }
             }
 
+            if (isset($_POST['stand'])) {
 
+                $player->stand();
+                $dealer->hit();
+                if ($dealer->score < 15) {
+                    $dealer->hit();
+                }
+                if ($dealer->score > 21 AND $player->score <= 21) {
 
+                    echo "Your score: " . $player->total_points;
+                    echo "<br>";
+                    echo "Dealers score: " . $dealer->score;
+                    echo "<br>";
+                    echo "You win!";
 
+                } elseif ($player->score <= $dealer->score) {
+                    echo "Your score: " . $player->total_points;
+                    echo "<br>";
+                    echo "Dealers score: " . $dealer->score;
+                    echo "<br>";
+                    echo "You lose!";
+                }
+            }
+
+            if(isset($_POST['surrender'])){
+                $dealer->hit();
+                if ($dealer->score < 15) {
+                    $dealer->hit();
+                    echo "GAME OVER!";
+                    echo "<br>";
+                    echo "Dealers score: " . $dealer->score;
+                }
+                echo "GAME OVER!";
+                echo "<br>";
+                echo "Dealers score: " . $dealer->score;
+            }
             ?>
         </div>
     </div>
